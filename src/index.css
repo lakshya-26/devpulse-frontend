@@ -1,17 +1,35 @@
-:root {
-  font-family: system-ui, sans-serif;
-  line-height: 1.5;
-  color: #0f172a;
-  background: #f8fafc;
-}
+@import 'tailwindcss';
 
 body {
   margin: 0;
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
 
-.app {
-  max-width: 40rem;
-  margin: 0 auto;
-  padding: 2rem;
+/* GitHub-like heatmap — level 0 must differ from card bg (#161b22) or the grid “disappears” */
+.react-calendar-heatmap .color-empty,
+.react-calendar-heatmap .devpulse-heat-0 {
+  fill: #21262d;
+}
+.react-calendar-heatmap .devpulse-heat-1 {
+  fill: #0e4429;
+}
+.react-calendar-heatmap .devpulse-heat-2 {
+  fill: #006d32;
+}
+.react-calendar-heatmap .devpulse-heat-3 {
+  fill: #26a641;
+}
+.react-calendar-heatmap .devpulse-heat-4 {
+  fill: #39d353;
+}
+
+.react-calendar-heatmap text {
+  fill: #8b949e;
+  font-size: 10px;
+}
+
+.react-calendar-heatmap rect {
+  stroke: #30363d;
+  stroke-width: 0.5px;
 }

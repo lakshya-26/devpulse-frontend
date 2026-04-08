@@ -1,5 +1,6 @@
 import Badge from '../ui/Badge.jsx';
 import RepoSparkline from '../charts/RepoSparkline.jsx';
+import EmptyState from '../ui/EmptyState.jsx';
 import { languageColor } from '../../lib/languageColors.js';
 import { formatPushedAgo } from '../../lib/time.js';
 
@@ -9,9 +10,9 @@ export default function RepoStatsGrid({ repos }) {
 
   if (!sorted.length) {
     return (
-      <p className="rounded-xl border border-[#30363d] bg-[#161b22] p-6 text-center text-sm text-gray-500">
-        No repository data.
-      </p>
+      <div className="rounded-xl border border-[#30363d] bg-[#161b22]">
+        <EmptyState type="repos" />
+      </div>
     );
   }
 

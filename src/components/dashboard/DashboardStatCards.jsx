@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import SkeletonCard from '../ui/SkeletonCard.jsx';
+import { SkeletonCard } from '../ui/Skeleton.jsx';
 import Badge from '../ui/Badge.jsx';
 import { languageColor } from '../../lib/languageColors.js';
 import { todayUtcKey } from '../charts/commitBarUtils.js';
@@ -37,7 +37,7 @@ export default function DashboardStatCards({ loading, commits, streak, languages
     return (
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {[0, 1, 2, 3].map((i) => (
-          <SkeletonCard key={i} height="h-32" />
+          <SkeletonCard key={i} />
         ))}
       </div>
     );

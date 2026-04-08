@@ -1,8 +1,24 @@
 @import 'tailwindcss';
 
+:root {
+  --bg-primary: #0d1117;
+  --bg-secondary: #010409;
+  --bg-card: #161b22;
+  --border-color: #30363d;
+  --text-primary: #e6edf3;
+  --text-secondary: #8b949e;
+  --accent: #58a6ff;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
+  font-family:
+    Inter,
+    system-ui,
+    sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -22,6 +38,12 @@ body {
 }
 .react-calendar-heatmap .devpulse-heat-4 {
   fill: #39d353;
+}
+
+/* Public profile: GitHub-style empty cell matches card */
+.public-profile-heatmap .color-empty,
+.public-profile-heatmap .devpulse-heat-0 {
+  fill: #161b22;
 }
 
 .react-calendar-heatmap text {

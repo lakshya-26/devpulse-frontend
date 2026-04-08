@@ -3,6 +3,7 @@ import { AuthProvider } from './context/AuthContext.jsx';
 import { ToastProvider } from './context/ToastContext.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import AppShell from './components/layout/AppShell.jsx';
+import { ErrorBoundary } from './components/ErrorBoundary.jsx';
 import Login from './pages/Login.jsx';
 import AuthSuccess from './pages/AuthSuccess.jsx';
 import Dashboard from './pages/Dashboard.jsx';
@@ -21,9 +22,30 @@ export default function App() {
             <Route path="/u/:username" element={<PublicProfile />} />
             <Route element={<ProtectedRoute />}>
               <Route element={<AppShell />}>
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/stats" element={<Stats />} />
-                <Route path="/goals" element={<Goals />} />
+                <Route
+                  path="/dashboard"
+                  element={
+                    <ErrorBoundary>
+                      <Dashboard />
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/stats"
+                  element={
+                    <ErrorBoundary>
+                      <Stats />
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/goals"
+                  element={
+                    <ErrorBoundary>
+                      <Goals />
+                    </ErrorBoundary>
+                  }
+                />
               </Route>
             </Route>
             <Route path="*" element={<Navigate to="/dashboard" replace />} />

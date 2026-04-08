@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { languageColor } from '../../lib/languageColors.js';
+import EmptyState from '../ui/EmptyState.jsx';
 
 /** Only for the doughnut instance — never register globally or it runs on Bar/Line/Spark and draws "undefined". */
 const doughnutCenterPlugin = {
@@ -74,8 +75,8 @@ export default function LanguagePieChart({ languages }) {
 
   if (!rows.length) {
     return (
-      <div className="flex h-[280px] items-center justify-center text-sm text-[#8b949e]">
-        No language data
+      <div className="flex h-[280px] items-center justify-center">
+        <EmptyState type="languages" />
       </div>
     );
   }

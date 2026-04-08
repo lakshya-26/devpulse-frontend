@@ -67,12 +67,7 @@ export default function PRTrendLine({ prs, heightClass = 'h-[250px] sm:h-[300px]
   );
 
   if (empty) {
-    return (
-      <EmptyState
-        title="No PRs in this period"
-        subtitle="Activity will appear when you open or merge pull requests."
-      />
-    );
+    return <EmptyState type="prs" />;
   }
 
   return (

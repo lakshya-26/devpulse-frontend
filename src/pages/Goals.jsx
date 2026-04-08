@@ -4,6 +4,8 @@ import api from '../services/api';
 import { useToast } from '../context/ToastContext.jsx';
 import GoalsStreakBanner from '../components/goals/GoalsStreakBanner.jsx';
 import GoalProgressBar from '../components/goals/GoalProgressBar.jsx';
+import EmptyState from '../components/ui/EmptyState.jsx';
+import { SkeletonCard } from '../components/ui/Skeleton.jsx';
 
 export default function Goals() {
   const { pushToast } = useToast();
@@ -14,6 +16,7 @@ export default function Goals() {
   const [history, setHistory] = useState(null);
   const [streak, setStreak] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [pageLoading, setPageLoading] = useState(true);
 
   const load = useCallback(async () => {
     const [td, hi, st] = await Promise.all([
@@ -34,7 +37,10 @@ export default function Goals() {
   }, []);
 
   useEffect(() => {
-    load().catch(() => {});
+    setPageLoading(true);
+    load()
+      .catch(() => {})
+      .finally(() => setPageLoading(false));
   }, [load]);
 
   async function onSubmit(e) {
@@ -60,6 +66,21 @@ export default function Goals() {
   const p = today?.progress;
   const hoursCurrent = p?.hoursToday ?? 0;
 
+  if (pageLoading) {
+    return (
+      <div className="text-gray-100">
+        <div className="mb-4 h-8 w-40 animate-pulse rounded bg-[#21262d]" />
+        <div className="mb-6 h-4 w-72 animate-pulse rounded bg-[#21262d]" />
+        <div className="mb-6 h-24 animate-pulse rounded-xl bg-[#21262d]" />
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <SkeletonCard />
+          <SkeletonCard />
+        </div>
+        <div className="mt-10 h-48 animate-pulse rounded-xl bg-[#21262d]" />
+      </div>
+    );
+  }
+
   return (
     <div className="text-gray-100">
       <h1 className="text-2xl font-bold text-white">Goals</h1>
@@ -77,6 +98,9 @@ export default function Goals() {
             <h2 className="text-lg font-semibold text-white">Set Today&apos;s Goals</h2>
             <span aria-hidden>✏️</span>
           </div>
+          {!g ? (
+            <EmptyState type="goals" />
+          ) : null}
           <form onSubmit={onSubmit} className="space-y-4">
             <div>
               <label className="mb-1 block text-xs text-gray-400" htmlFor="tc">

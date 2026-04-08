@@ -1,8 +1,12 @@
 import { useMemo } from 'react';
 import { Bar } from 'react-chartjs-2';
+import EmptyState from '../ui/EmptyState.jsx';
 import { formatBarLabel, todayUtcKey, utcDateKeysForRange } from './commitBarUtils.js';
 
 export default function CommitBarChart({ range, commits, heightClass = 'h-[250px] sm:h-[300px]' }) {
+  const total = commits?.total ?? 0;
+  const showEmpty = commits != null && total === 0;
+
   const byDate = commits?.byDate ?? {};
   const byDateMessages = commits?.byDateMessages ?? {};
   const today = todayUtcKey();
@@ -82,6 +86,10 @@ export default function CommitBarChart({ range, commits, heightClass = 'h-[250px
     }),
     [labels, data, todayIndex]
   );
+
+  if (showEmpty) {
+    return <EmptyState type="commits" />;
+  }
 
   return (
     <div className={heightClass}>

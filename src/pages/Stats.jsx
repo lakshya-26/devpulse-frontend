@@ -3,6 +3,7 @@ import api from '../services/api';
 import ContributionHeatmap from '../components/stats/ContributionHeatmap.jsx';
 import CommitHistoryTable from '../components/stats/CommitHistoryTable.jsx';
 import RepoStatsGrid from '../components/stats/RepoStatsGrid.jsx';
+import { SkeletonCard, SkeletonHeatmap, SkeletonTable } from '../components/ui/Skeleton.jsx';
 
 const RANGES = [
   { id: '7d', label: '7d' },
@@ -67,23 +68,35 @@ export default function Stats() {
         </div>
       </div>
 
-      {loading && !commits ? (
-        <p className="text-sm text-gray-500">Loading…</p>
-      ) : null}
-
       <section className="mb-10">
         <h2 className="mb-3 text-lg font-semibold text-white">Contributions</h2>
-        <ContributionHeatmap byDate={contrib?.byDate} />
+        {loading && !contrib ? (
+          <SkeletonHeatmap />
+        ) : (
+          <ContributionHeatmap byDate={contrib?.byDate} />
+        )}
       </section>
 
       <section className="mb-10">
         <h2 className="mb-3 text-lg font-semibold text-white">Commit history</h2>
-        <CommitHistoryTable items={commits?.items} repoLanguages={repoLanguages} />
+        {loading && !commits ? (
+          <SkeletonTable rows={6} />
+        ) : (
+          <CommitHistoryTable items={commits?.items} repoLanguages={repoLanguages} />
+        )}
       </section>
 
       <section>
         <h2 className="mb-3 text-lg font-semibold text-white">Repositories</h2>
-        <RepoStatsGrid repos={repos?.repos} />
+        {loading && !repos ? (
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {[0, 1, 2].map((i) => (
+              <SkeletonCard key={i} />
+            ))}
+          </div>
+        ) : (
+          <RepoStatsGrid repos={repos?.repos} />
+        )}
       </section>
     </div>
   );

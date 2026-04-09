@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import api from '../services/api';
 import { useStats } from '../hooks/useStats.js';
 import { useToast } from '../context/ToastContext.jsx';
+import { fetchCompareStats } from '../services/analytics.js';
+import CompareStatsCard from '../components/dashboard/CompareStatsCard.jsx';
 import DashboardShareBanner from '../components/dashboard/DashboardShareBanner.jsx';
 import DashboardToolbar from '../components/dashboard/DashboardToolbar.jsx';
 import DashboardStatCards from '../components/dashboard/DashboardStatCards.jsx';
@@ -14,9 +16,40 @@ import { SkeletonChart } from '../components/ui/Skeleton.jsx';
 
 export default function Dashboard() {
   const [range, setRange] = useState(/** @type {'7d'|'30d'|'90d'} */ ('7d'));
+  const [compareOn, setCompareOn] = useState(false);
+  const [compareData, setCompareData] = useState(null);
+  const [compareLoading, setCompareLoading] = useState(false);
+  const [compareError, setCompareError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
   const { commits, languages, streak, prs, loading, error, refetch } = useStats(range);
   const { pushToast } = useToast();
+
+  useEffect(() => {
+    if (!compareOn) {
+      setCompareData(null);
+      setCompareError(null);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      setCompareLoading(true);
+      setCompareError(null);
+      try {
+        const d = await fetchCompareStats(range);
+        if (!cancelled) setCompareData(d);
+      } catch (e) {
+        if (!cancelled) {
+          setCompareData(null);
+          setCompareError(e.response?.data?.message || e.message || 'Could not load comparison');
+        }
+      } finally {
+        if (!cancelled) setCompareLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [compareOn, range]);
 
   async function handleRefresh() {
     setRefreshing(true);
@@ -50,6 +83,8 @@ export default function Dashboard() {
         onRefresh={handleRefresh}
         loading={loading}
         refreshing={refreshing}
+        compareOn={compareOn}
+        onCompareChange={setCompareOn}
       />
 
       {error ? (
@@ -64,6 +99,15 @@ export default function Dashboard() {
         streak={streak}
         languages={languages}
       />
+
+      {compareOn ? (
+        <CompareStatsCard
+          range={range}
+          data={compareData}
+          loading={compareLoading}
+          error={compareError}
+        />
+      ) : null}
 
       {loading && !commits && !error ? (
         <div className="mt-8 space-y-8">

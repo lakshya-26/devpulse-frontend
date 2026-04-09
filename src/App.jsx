@@ -9,6 +9,7 @@ import AuthSuccess from './pages/AuthSuccess.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import Stats from './pages/Stats.jsx';
 import Goals from './pages/Goals.jsx';
+import RepoDetails from './pages/RepoDetails.jsx';
 import PublicProfile from './pages/PublicProfile.jsx';
 
 export default function App() {
@@ -43,6 +44,14 @@ export default function App() {
                   element={
                     <ErrorBoundary>
                       <Goals />
+                    </ErrorBoundary>
+                  }
+                />
+                <Route
+                  path="/repo/:repoName"
+                  element={
+                    <ErrorBoundary>
+                      <RepoDetails />
                     </ErrorBoundary>
                   }
                 />

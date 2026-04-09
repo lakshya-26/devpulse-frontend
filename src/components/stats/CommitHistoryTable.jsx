@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Tooltip } from 'react-tooltip';
 import { useDebouncedValue } from '../../hooks/useDebouncedValue.js';
 import Badge from '../ui/Badge.jsx';
@@ -115,7 +116,13 @@ export default function CommitHistoryTable({ items, repoLanguages }) {
                   className="border-b border-[#21262d] text-gray-300 transition hover:bg-[#21262d]"
                 >
                   <td className="px-4 py-2 align-top">
-                    <span className="font-medium text-white">{c.repo}</span>
+                    <Link
+                      to={`/repo/${encodeURIComponent(c.repo)}`}
+                      className="font-medium text-[#58a6ff] hover:text-[#79c0ff] hover:underline"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {c.repo}
+                    </Link>
                     {lang ? (
                       <div className="mt-1">
                         <Badge color={languageColor(lang)} label={lang} />

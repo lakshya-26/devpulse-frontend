@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { SkeletonCard } from '../ui/Skeleton.jsx';
 import Badge from '../ui/Badge.jsx';
 import { languageColor } from '../../lib/languageColors.js';
@@ -89,13 +90,14 @@ export default function DashboardStatCards({ loading, commits, streak, languages
         </div>
         {topRepo ? (
           <>
-            <p
-              className="mt-2 truncate text-lg font-bold text-white"
-              title={topRepo.name}
+            <Link
+              to={`/repo/${encodeURIComponent(topRepo.name)}`}
+              className="mt-2 block truncate text-lg font-bold text-[#58a6ff] transition hover:text-[#79c0ff] hover:underline"
+              title={`Open ${topRepo.name} details`}
             >
               {topRepo.name}
-            </p>
-            <p className="text-sm text-gray-400">{topRepo.commits} commits this period</p>
+            </Link>
+            <p className="text-sm text-gray-400">{topRepo.commits} commits this period · tap for deep dive</p>
             <div className="mt-2">
               <Badge
                 color={languageColor(topRepo.language)}
